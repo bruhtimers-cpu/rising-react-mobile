@@ -1,0 +1,297 @@
+.wrapper {
+  --canvas: #e9edf0;
+  --surface-1: #ffffff;
+  --surface-2: #f5f7f8;
+  --surface-3: #e9edef;
+  --hair: rgba(40,52,63,0.12);
+  --hair-mid: rgba(40,52,63,0.24);
+  --ink: #25313b;
+  --ink-muted: #36434e;
+  --ink-subtle: #596873;
+  --ink-dim: #687782;
+  --accent: #2876ad;
+  --c-safe: #30865e;
+  --glass-bg: rgba(255,255,255,0.94);
+  --glass-bg-strong: rgba(255,255,255,0.98);
+  --glass-border: rgba(40,52,63,0.24);
+  --glass-shadow: 0 2px 6px rgba(0,0,0,0.18);
+  --glass-blur: 4px;
+  --map-filter: none;
+  --r-md: 4px;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  overflow: hidden;
+  background: var(--canvas);
+}
+
+.wrapper :global(.maplibregl-ctrl-top-right) {
+  top: 78px !important;
+  right: 10px !important;
+  left: auto !important;
+  bottom: auto !important;
+}
+
+.wrapper :global(.maplibregl-ctrl-bottom-right) {
+  right: 8px !important;
+  bottom: 8px !important;
+}
+
+.canvas {
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+}
+
+:global(.maplibregl-ctrl-group) {
+  overflow: hidden;
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: var(--r-md) !important;
+  box-shadow: var(--glass-shadow) !important;
+}
+
+:global(.maplibregl-ctrl-group button) {
+  width: 32px !important;
+  height: 32px !important;
+  color: var(--ink-muted) !important;
+  background: transparent !important;
+  border-bottom: 1px solid var(--hair-mid) !important;
+  transition: background 140ms ease-out !important;
+}
+
+:global(.maplibregl-ctrl-group button:hover) {
+  background: var(--surface-3) !important;
+}
+
+:global(.maplibregl-ctrl-group button:last-child) {
+  border-bottom: none !important;
+}
+
+:global(.maplibregl-ctrl-attrib) {
+  color: var(--ink-dim) !important;
+  background: var(--glass-bg) !important;
+  font-size: 9px !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+:global(.maplibregl-ctrl-attrib a) {
+  color: var(--ink-muted) !important;
+}
+
+:global(.maplibregl-popup-content) {
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.badge {
+  position: absolute;
+  top: 80px;
+  right: 58px;
+  left: auto;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: calc(100% - 24px);
+  overflow: hidden;
+  padding: 6px 10px;
+  color: var(--ink-muted);
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  box-shadow: var(--glass-shadow);
+  font-family: var(--f-mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.badgeDot,
+.statusDot {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: var(--ink-muted);
+}
+
+.loc_gps .badgeDot {
+  animation: badgePulse 2.4s ease-in-out infinite;
+}
+
+.loc_offline .badgeDot,
+.loc_default .badgeDot {
+  background: var(--ink-subtle);
+}
+
+@keyframes badgePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.42; }
+}
+
+.badgeText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.liveLevelBadge {
+  position: absolute;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 9px;
+  color: var(--ink-muted);
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(var(--glass-blur)) saturate(115%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(115%);
+  font-family: var(--f-mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+}
+
+.zoomControl {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  z-index: 10;
+  display: flex;
+  width: 176px;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px 10px;
+  color: var(--ink-muted);
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  box-shadow: var(--glass-shadow);
+  font-family: var(--f-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.zoomLabel {
+  display: flex;
+  justify-content: space-between;
+}
+
+.zoomControl input {
+  width: 100%;
+  margin: 0;
+  accent-color: var(--accent, #27bfff);
+  cursor: ew-resize;
+}
+
+.liveLevelBadge {
+  position: absolute;
+  top: 122px;
+  right: 58px;
+  left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.statusDot {
+  background: var(--c-safe);
+  box-shadow: 0 0 0 2px rgba(23,111,174,0.2);
+}
+
+.terrainWarning {
+  padding-left: 7px;
+  border-left: 1px solid var(--hair-mid);
+  color: var(--ink-subtle);
+  font-family: var(--f-body);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.sensorMarker {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  opacity: 0.78;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 5px rgba(0,0,0,0.35));
+  transition: opacity 160ms ease-out;
+}
+
+.sensorMarker[data-connected='true'] {
+  opacity: 1;
+}
+
+.markerPulse {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 30px;
+  height: 30px;
+  border: 2px solid rgba(39,146,255,0.58);
+  border-radius: 50%;
+  background: rgba(39,146,255,0.12);
+}
+
+.markerCore {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  background: #2876ad;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.35);
+}
+
+.errBox {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px;
+  color: var(--ink-muted);
+  background: var(--canvas);
+  font-family: var(--f-mono);
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .liveLevelBadge {
+    top: 105px;
+    right: 54px;
+    font-size: 0.56rem;
+  }
+
+  .zoomControl {
+    left: 12px;
+    bottom: 12px;
+    width: 150px;
+  }
+
+  .wrapper :global(.maplibregl-ctrl-top-right) {
+    top: 62px !important;
+    right: 8px !important;
+  }
+}

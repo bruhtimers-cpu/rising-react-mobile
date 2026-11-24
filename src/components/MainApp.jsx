@@ -8,6 +8,7 @@ import { useDarkMode } from '../hooks/useDarkMode.js'
 import WeatherCard from './WeatherCard.jsx'
 import styles from './MainApp.module.css'
 
+const FloodTerrain3D = lazy(() => import('./FloodTerrain3D.jsx'))
 const MapModal = lazy(() => import('./MapModal.jsx'))
 const CHANNEL_M = 12.6
 const HISTORY_RANGES = [
@@ -309,12 +310,28 @@ export default function MainApp({ visible }) {
   const [calibrationState, setCalibrationState] = useState('idle')
   const [activePanel, setActivePanel] = useState('live')
   const [emergencyMapOpen, setEmergencyMapOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(() => window.matchMedia('(max-width: 700px)').matches)
   const { sensor, history, online: sensorOnline, lastUpdated, calibrate } = useSensor()
   const { weather, forecast, loading: weatherLoading, error: weatherError } = useWeather()
   const { dark, toggle: toggleDark } = useDarkMode()
+  const mapActionsRef = useRef(null)
   const panelStackRef = useRef(null)
 
+  const setMapActions = useCallback(actions => {
+    mapActionsRef.current = actions
+  }, [])
   const closeEmergencyMap = useCallback(() => setEmergencyMapOpen(false), [])
+
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 700px)')
+    const updateLayout = event => {
+      setIsMobile(event.matches)
+      if (event.matches) mapActionsRef.current = null
+    }
+    query.addEventListener('change', updateLayout)
+    updateLayout(query)
+    return () => query.removeEventListener('change', updateLayout)
+  }, [])
 
   useEffect(() => {
     const fn = event => {
@@ -363,7 +380,20 @@ export default function MainApp({ visible }) {
   ]
 
   return (
-    <div className={styles.hud}>
+    <div className={`${styles.hud} ${isMobile ? '' : styles.desktopLayout}`}>
+      {!isMobile && (
+        <div className={styles.mapCanvas}>
+          <Suspense fallback={<div className={styles.mapLoading}>Loading 3D terrain…</div>}>
+            <FloodTerrain3D
+              sensor={sensor}
+              sensorOnline={hasLiveSensor}
+              waterLevelM={waterLevelM}
+              weather={weather}
+              onMapReady={setMapActions}
+            />
+          </Suspense>
+        </div>
+      )}
       <FloodAlert floodStatus={floodStatus} waterLevelM={waterLevelM} />
       <DebugConsole lines={[]} visible={debugVisible} />
 
@@ -444,9 +474,12 @@ export default function MainApp({ visible }) {
                 <button
                   type="button"
                   className={styles.secondaryButton}
-                  onClick={() => setEmergencyMapOpen(true)}
+                  onClick={() => isMobile
+                    ? setEmergencyMapOpen(true)
+                    : mapActionsRef.current?.focusOnSensor?.()}
+                  disabled={!isMobile && !hasLiveSensor}
                 >
-                  Open evacuation map
+                  {isMobile ? 'Open evacuation map' : 'Center map'}
                 </button>
               </div>
             </section>
