@@ -1,0 +1,17 @@
+.debugConsole {
+  position: fixed; bottom: 20px; right: 20px;
+  width: 360px; max-height: 180px;
+  background: var(--glass-bg-strong);
+  border: 2px solid var(--glass-border);
+  border-radius: 6px; padding: 12px;
+  box-shadow: var(--glass-shadow);
+  font-family: var(--f-mono);
+  font-size: 11px; overflow-y: auto;
+  z-index: 1000; display: none;
+}
+.debugConsole.show { display: block; }
+
+.debugLine { margin-bottom: 4px; color: var(--ink-muted); }
+.debugLine.error   { color: var(--c-dangerous); }
+.debugLine.success { color: var(--c-safe); }
+.debugLine.info    { color: var(--accent); }

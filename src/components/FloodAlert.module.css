@@ -1,0 +1,154 @@
+.banner {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 999;
+  animation: slideDown 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  overflow: hidden;
+  border-bottom: 3px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-110%); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+
+/* ── Colour themes ── */
+.critical,
+.dangerous {
+  background: var(--glass-bg-strong);
+}
+
+.critical {
+  border-bottom-color: var(--c-critical);
+}
+
+.dangerous {
+  border-bottom-color: var(--c-dangerous);
+}
+
+/* ── Inner row ── */
+.bannerInner {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 2vw, 14px);
+  padding: max(10px, env(safe-area-inset-top)) clamp(12px, 3vw, 20px) 12px;
+  color: var(--ink);
+}
+
+/* ── Siren icon ── */
+.sirenIcon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  color: var(--c-critical);
+  animation: sirenSpin 1s linear infinite;
+}
+
+@keyframes sirenSpin {
+  0%   { filter: brightness(1);   }
+  50%  { filter: brightness(1.6); }
+  100% { filter: brightness(1);   }
+}
+
+.dangerous .sirenIcon { color: var(--c-dangerous); }
+
+/* ── Text block ── */
+.bannerText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.bannerLabel {
+  font-family: var(--f-display);
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  font-weight: 900;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+}
+
+.bannerSub {
+  font-family: var(--f-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+.bannerLevel {
+  font-family: var(--f-mono);
+  font-size: 0.72rem;
+  color: var(--ink-subtle);
+  margin-top: 2px;
+}
+
+.bannerLevel strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* ── Replay button ── */
+.replayBtn {
+  flex-shrink: 0;
+  background: var(--surface-2);
+  border: 2px solid var(--glass-border);
+  border-radius: 5px;
+  color: var(--ink-muted);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.replayBtn:hover { background: var(--surface-3); }
+
+/* ── Dismiss button ── */
+.dismissBtn {
+  flex-shrink: 0;
+  background: var(--surface-2);
+  border: 2px solid var(--glass-border);
+  border-radius: 5px;
+  color: var(--ink-muted);
+  width: 36px;
+  height: 36px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dismissBtn:hover { background: var(--surface-3); }
+
+/* ── 30s countdown bar ── */
+.timerBar {
+  height: 3px;
+  background: var(--surface-3);
+  transform-origin: left;
+  animation: timerDrain 30s linear infinite;
+}
+
+@keyframes timerDrain {
+  from { transform: scaleX(1); }
+  to   { transform: scaleX(0); }
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .bannerInner { padding: 10px 12px; gap: 8px; }
+  .sirenIcon { width: 28px; height: 28px; }
+  .bannerLabel { font-size: 0.78rem; letter-spacing: 0.08em; }
+  .bannerSub { font-size: 0.68rem; }
+  .replayBtn, .dismissBtn { width: 30px; height: 30px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner,
+  .sirenIcon,
+  .timerBar { animation: none; }
+}

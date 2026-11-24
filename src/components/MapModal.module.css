@@ -1,0 +1,391 @@
+.overlay {
+  --canvas: #f0f2f4;
+  --surface-1: #ffffff;
+  --surface-2: #f6f7f8;
+  --surface-3: #e8ecef;
+  --hair: rgba(40,52,63,0.12);
+  --hair-mid: rgba(40,52,63,0.25);
+  --ink: #1b2530;
+  --ink-muted: #313e49;
+  --ink-subtle: #56636d;
+  --ink-dim: #687681;
+  --accent: #2876ad;
+  --accent-hover: #1b5b88;
+  --accent-dim: rgba(40,118,173,0.14);
+  --c-safe: #31835d;
+  --c-dangerous: #b43d43;
+  --c-dangerous-dim: rgba(180,61,67,0.12);
+  --glass-bg: rgba(255,255,255,0.94);
+  --glass-bg-strong: rgba(255,255,255,0.98);
+  --glass-border: rgba(40,52,63,0.24);
+  --glass-shadow: 0 10px 28px rgba(0,0,0,0.2);
+  --glass-blur: 4px;
+  --r-md: 4px;
+  position: fixed; inset: 0; z-index: 9000;
+  background: color-mix(in srgb, var(--canvas) 82%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex; align-items: center; justify-content: center;
+  padding: var(--space-page);
+  overflow: hidden;
+  animation: fadeIn 0.22s ease;
+}
+
+.overlay[data-theme='dark'] {
+  --canvas: #101316;
+  --surface-1: #1b2026;
+  --surface-2: #242a31;
+  --surface-3: #303840;
+  --hair: rgba(225,232,239,0.16);
+  --hair-mid: rgba(225,232,239,0.3);
+  --ink: #f7f8fa;
+  --ink-muted: #dce2e8;
+  --ink-subtle: #b6c0c9;
+  --ink-dim: #96a1ab;
+  --accent: #74b8f5;
+  --accent-hover: #a5d2fb;
+  --accent-dim: rgba(70,143,205,0.2);
+  --c-safe: #59d39a;
+  --c-dangerous: #ff6e7d;
+  --c-dangerous-dim: rgba(205,61,78,0.22);
+  --glass-bg: rgba(27,32,38,0.97);
+  --glass-bg-strong: rgba(16,19,22,0.99);
+  --glass-border: rgba(225,232,239,0.38);
+  --glass-shadow: 4px 4px 0 rgba(0,0,0,0.72);
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* ── Card shell — matches WeatherCard / FloodPanel ── */
+.modal {
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  width: min(960px, 100%);
+  height: min(92dvh, 900px);
+  max-height: calc(100dvh - var(--space-page) * 2);
+  overflow: hidden;
+  box-shadow: var(--glass-shadow);
+  display: flex; flex-direction: column;
+}
+
+/* ── Header — same as weather card ── */
+.header {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 16px 18px 14px;
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--glass-border);
+  border-radius: 7px 7px 0 0;
+  flex-shrink: 0;
+}
+
+.headerTop {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+
+.headerLeft { display: flex; align-items: center; gap: 10px; min-width: 0; }
+
+.headerIcon {
+  flex-shrink: 0;
+  width: 36px; height: 36px;
+  border-radius: 5px;
+  background: var(--surface-2);
+  border: 1px solid var(--glass-border);
+  display: flex; align-items: center; justify-content: center;
+}
+
+.headerTitle {
+  font-family: var(--font-display);
+  font-size: clamp(0.72rem, 2.2vw, 0.88rem);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.headerMeta {
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap;
+}
+
+.coords {
+  font-family: var(--font-body);
+  font-size: clamp(0.62rem, 1.8vw, 0.74rem);
+  color: var(--ink-muted);
+  line-height: 1.4;
+  flex: 1; min-width: 0;
+}
+
+.gpsTag {
+  font-family: var(--font-body);
+  font-size: 0.62rem; font-weight: 700;
+  padding: 4px 11px; border-radius: 4px; letter-spacing: 0.02em;
+  flex-shrink: 0;
+  border: 1px solid var(--glass-border);
+}
+.gpsOn      { background: var(--c-safe-dim); color: var(--c-safe); }
+.gpsBrowser { background: var(--accent-dim); color: var(--accent-hover); }
+.gpsOff     { background: var(--c-dangerous-dim); color: var(--c-dangerous); }
+
+.closeBtn {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 5px;
+  width: 36px; height: 36px; cursor: pointer; color: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s; flex-shrink: 0;
+}
+.closeBtn:hover { background: var(--surface-3); }
+
+/* ── Body with grid bg like flood/weather cards ── */
+.body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--canvas);
+}
+
+/* ── Info bar ── */
+.infoBar {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 12px 16px;
+  background: var(--glass-bg);
+  border-bottom: 1px solid var(--glass-border);
+  flex-shrink: 0;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+}
+
+.statusRow {
+  display: flex; align-items: center; gap: 8px;
+}
+
+.statusDot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent); flex-shrink: 0;
+  box-shadow: 0 0 0 2px var(--accent-dim);
+  animation: statusPulse 2s ease-in-out infinite;
+}
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+.statusText {
+  font-family: var(--font-body);
+  font-size: clamp(0.66rem, 1.8vw, 0.74rem);
+  font-weight: 700;
+  color: var(--ink-muted);
+  line-height: 1.35;
+}
+
+.legend {
+  display: flex; gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+.legend::-webkit-scrollbar { display: none; }
+
+.legendItem {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--font-body);
+  font-size: 0.64rem; font-weight: 700; color: var(--ink);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  padding: 5px 11px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.legendIcon {
+  width: 14px; height: 14px; object-fit: contain; flex-shrink: 0;
+}
+
+.dotBlue { width:10px;height:10px;border-radius:50%;background:var(--accent);display:inline-block;flex-shrink:0; }
+
+/* ── Map inset card ── */
+.mapFrame {
+  flex: 1;
+  min-height: 0;
+  padding: 0 12px 12px;
+  display: flex;
+}
+
+.mapWrap {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.16);
+  background: var(--glass-bg);
+}
+
+.map {
+  position: absolute; inset: 0;
+}
+
+.mapWrap :global(.leaflet-control-layers) {
+  color: var(--ink-muted);
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: var(--glass-shadow) !important;
+}
+
+.mapWrap :global(.leaflet-control-layers-separator) {
+  border-top-color: var(--hair-mid);
+}
+
+.nearestResources {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+  padding: 10px 12px 0;
+  flex: 0 0 auto;
+}
+
+.resourceCard {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--glass-border);
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--surface-1) 86%, transparent);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+
+.resourceType {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-subtle);
+  font: 700 0.58rem/1.2 var(--f-mono);
+  text-transform: uppercase;
+}
+
+.resourceType img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.resourceCard > strong {
+  width: 100%;
+  overflow: hidden;
+  color: var(--ink);
+  font: 700 0.72rem/1.25 var(--f-body);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.resourceDistance {
+  color: var(--ink-subtle);
+  font: 500 0.58rem/1.2 var(--f-mono);
+}
+
+.routeLink {
+  display: inline-flex;
+  min-height: 27px;
+  align-items: center;
+  gap: 5px;
+  margin-top: 2px;
+  padding: 0 8px;
+  color: var(--ink);
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  background: var(--surface-2);
+  font: 700 0.58rem/1 var(--f-body);
+  text-decoration: none;
+  transition: background 140ms ease, transform 140ms ease;
+}
+
+.routeLink:hover {
+  background: var(--surface-3);
+  transform: translateY(-1px);
+}
+
+.siteDisclaimer {
+  flex: 0 0 auto;
+  padding: 7px 14px 0;
+  color: var(--ink-subtle);
+  font: 500 0.56rem/1.35 var(--f-body);
+}
+
+/* ── Leaflet controls inside card ── */
+:global(.leaflet-control-zoom) {
+  border: none !important;
+  box-shadow: var(--glass-shadow) !important;
+  border-radius: var(--r-md) !important;
+  overflow: hidden;
+  margin-right: 10px !important;
+  margin-bottom: 10px !important;
+}
+:global(.leaflet-control-zoom a) {
+  background: var(--glass-bg) !important;
+  color: var(--ink-muted) !important;
+  border-color: var(--glass-border) !important;
+  font-weight: 700 !important;
+  width: 34px !important;
+  height: 34px !important;
+  line-height: 34px !important;
+}
+
+/* ── Tablet ── */
+@media (max-width: 1024px) {
+  .modal {
+    width: min(860px, 100%);
+    height: min(88dvh, 780px);
+  }
+}
+
+/* ── Mobile — full screen card feel ── */
+@media (max-width: 768px) {
+  .overlay {
+    padding: 0;
+    align-items: stretch;
+  }
+  .modal {
+    width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+  }
+  .header {
+    border-radius: 0;
+    padding: max(12px, env(safe-area-inset-top)) 14px 12px;
+  }
+  .infoBar { padding: 10px 12px; }
+  .mapFrame { padding: 0 8px max(8px, env(safe-area-inset-bottom)); }
+  .mapWrap { border-radius: 6px; }
+  .nearestResources { gap: 6px; padding: 8px 8px 0; }
+  .resourceCard { gap: 5px; padding: 8px; }
+  .resourceType { font-size: 0.5rem; }
+  .resourceType img { width: 16px; height: 16px; }
+  .resourceCard > strong { font-size: 0.62rem; }
+  .resourceDistance { font-size: 0.5rem; }
+  .routeLink { min-height: 25px; padding: 0 6px; font-size: 0.53rem; }
+  .siteDisclaimer { padding: 6px 10px 0; font-size: 0.5rem; }
+}
+
+@media (max-width: 380px) {
+  .legendItem { font-size: 0.58rem; padding: 4px 9px; }
+  .headerIcon { width: 32px; height: 32px; border-radius: 10px; }
+  .closeBtn { width: 32px; height: 32px; border-radius: 10px; }
+  .nearestResources { grid-template-columns: 1fr; max-height: 150px; overflow-y: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay { animation: none; }
+  .routeLink { transition: none; }
+}
